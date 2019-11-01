@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j1906.mapper.SysPermissionMapper">
+	<sql id="perm_columns">
+		p.permission_id permissionId,
+		p.per_name perName,
+		p.menu_name menuName,
+		p.menu_type menuType,
+		p.menu_url menuUrl,
+		p.menu_code menuCode,
+		p.parent_code parentCode,
+		p.per_desc perDesc,
+		p.if_vilid ifVilid
+	</sql>
+    <select id="findPermByLoginName" resultType="com.qf.j1906.pojo.SysPermission">
+			select
+			<include refid="perm_columns"></include>
+			from
+				tb_sys_user u,
+				tb_user_role ur,
+				tb_sys_role r,
+				tb_role_permission rp,
+				tb_sys_permission p
+			where
+				u.userid=ur.user_id
+				and ur.role_id=r.role_id
+				and r.role_id=rp.role_id
+				and rp.permission_id=p.permission_id
+				and u.loginName=#{name}
+    </select>
+</mapper>
